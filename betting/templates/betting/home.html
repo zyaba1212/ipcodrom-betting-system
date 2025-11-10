@@ -1,0 +1,17 @@
+{% extends 'betting/base.html' %}
+
+{% block content %}
+<h2>Ближайшие забеги</h2>
+
+{% for race in races %}
+<div class="race-card">
+    <h3>{{ race.title }}</h3>
+    <p><strong>Время:</strong> {{ race.scheduled_time }}</p>
+    <p><strong>Дистанция:</strong> {{ race.distance }} м</p>
+    <p><strong>Призовой фонд:</strong> {{ race.prize_pool }} руб.</p>
+    <a href="{% url 'race_detail' race.id %}" class="btn">Подробнее</a>
+</div>
+{% empty %}
+<p>Нет предстоящих забегов</p>
+{% endfor %}
+{% endblock %}

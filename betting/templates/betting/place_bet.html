@@ -1,0 +1,30 @@
+{% extends 'betting/base.html' %}
+
+{% block content %}
+<h2>Размещение ставки</h2>
+<div class="bet-info">
+    <h3>Ставка на: {{ participant.horse.name }}</h3>
+    <p>Жокей: {{ participant.jockey.first_name }} {{ participant.jockey.last_name }}</p>
+    <p>Дорожка: {{ participant.lane_number }}</p>
+    <p>Коэффициент на победу: {{ participant.win_odds }}</p>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <div style="margin: 1rem 0;">
+        <label><strong>Тип ставки:</strong></label><br>
+        <select name="bet_type" style="padding: 0.5rem; width: 200px; margin: 0.5rem 0;">
+            <option value="win">На победу</option>
+            <option value="place">На попадание в призы</option>
+        </select>
+    </div>
+    <div style="margin: 1rem 0;">
+        <label><strong>Сумма ставки:</strong></label><br>
+        <input type="number" name="amount" min="10" max="1000" step="10" value="100" 
+               style="padding: 0.5rem; width: 200px; margin: 0.5rem 0;">
+    </div>
+    <button type="submit" class="btn-bet">Разместить ставку</button>
+</form>
+
+<a href="{% url 'race_detail' participant.race.id %}" class="btn">← Назад к забегу</a>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'betting/base.html' %}
+
+{% block content %}
+<div class="race-header">
+    <h2>{{ race.title }}</h2>
+    <p><strong>Время:</strong> {{ race.scheduled_time }}</p>
+    <p><strong>Дистанция:</strong> {{ race.distance }} м</p>
+    <p><strong>Призовой фонд:</strong> {{ race.prize_pool }} руб.</p>
+    <p><strong>Статус:</strong> {{ race.get_status_display }}</p>
+</div>
+
+<h3>Участники забега</h3>
+<div class="participants-list">
+    {% for participant in participants %}
+    <div class="participant-card">
+        <h4>{{ participant.horse.name }} (Дорожка {{ participant.lane_number }})</h4>
+        <p><strong>Жокей:</strong> {{ participant.jockey.first_name }} {{ participant.jockey.last_name }}</p>
+        <p><strong>Коэффициент на победу:</strong> {{ participant.win_odds }}</p>
+        <a href="{% url 'place_bet' participant.id %}" class="btn-bet">
+            Сделать ставку
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<a href="{% url 'home' %}" class="btn">← Назад к расписанию</a>
+{% endblock %}
