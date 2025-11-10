@@ -107,15 +107,16 @@ def deposit_funds(request):
         amount = request.POST.get('amount')
         try:
             amount = float(amount)
-            if amount > 0:
-                request.user.profile.balance += amount
-                request.user.profile.save()
-                messages.success(request, f'На счет зачислено {amount}₽')
-                return redirect('home')
+            if amount < 10:
+                messages.error(request, 'Минимальная сумма пополнения - 10 рублей')
             else:
-                messages.error(request, 'Сумма должна быть положительной')
-        except ValueError:
-            messages.error(request, 'Неверная сумма')
+                from decimal import Decimal
+                request.user.profile.balance += Decimal(str(amount))
+                request.user.profile.save()
+                messages.success(request, f'Счет успешно пополнен на {amount} рублей')
+                return redirect('home')
+        except (ValueError, TypeError):
+            messages.error(request, 'Введите корректную сумму')
     
     return render(request, 'betting/deposit.html')
 

@@ -1,81 +1,137 @@
 {% extends "betting/base.html" %}
-{% load betting_extras %}
 
 {% block content %}
-<!-- Быстрые действия -->
-{% if user.is_authenticated %}
-<div class="quick-actions">
-    <div class="action-card">
-        <h3>💰 Баланс</h3>
-        <p class="balance-amount">{{ user.profile.balance }}₽</p>
-        <a href="{% url 'deposit' %}" class="btn-primary">Пополнить</a>
-    </div>
-    <div class="action-card">
-        <h3>🎯 Ставки</h3>
-        <p>Активных: {{ active_bets_count }}</p>
-        <a href="{% url 'place_bet' %}" class="btn-primary">Сделать ставку</a>
-    </div>
-    <div class="action-card">
-        <h3>📊 Статистика</h3>
-        <p>Выиграно: {{ total_won }}₽</p>
-        <a href="{% url 'bet_history' %}" class="btn-primary">История</a>
-    </div>
-</div>
-{% endif %}
-
-<!-- Советы для ставок -->
-<div class="tip-section">
-    <h3>💡 Совет дня</h3>
-    <p>{% get_random_tip %}</p>
-</div>
-
-<!-- Таймеры для забегов -->
-<section class="races-section">
-    <h2>🏇 Ближайшие забеги</h2>
-    
-    {% for race in races %}
-    <div class="race-card" id="race-{{ race.id }}">
-        <div class="race-header">
-            <h3>{{ race.name }}</h3>
-            <div class="race-meta">
-                <span class="race-status {{ race.status }}">{{ race.get_status_display }}</span>
-                <span class="race-timer" data-datetime="{{ race.date_time|date:'c' }}">
-                    {{ race.date_time|time_until }}
-                </span>
+<div class="home-container">
+    {% if not user.is_authenticated %}
+    <!-- Гость - картинка с кнопками поверх -->
+    <div class="hero-card">
+        <div class="hero-background"></div>
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Ипподром</h1>
+                <p class="hero-subtitle">Ставки на лошадиные бега</p>
+                <p class="hero-description">
+                    Профессиональная платформа для ставок с лучшими коэффициентами. 
+                    Присоединяйтесь к тысячам игроков уже сегодня.
+                </p>
+                <div class="cta-buttons">
+                    <a href="{% url 'login' %}" class="btn btn-transparent">
+                        <span>Войти в аккаунт</span>
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn-transparent">
+                        <span>Создать аккаунт</span>
+                    </a>
+                </div>
             </div>
         </div>
-        
-        <div class="race-countdown">
-            <strong>Старт: {{ race.date_time|date:"d.m.Y в H:i" }}</strong>
+    </div>
+
+    <!-- Дополнительный контент под картинкой -->
+    <div class="additional-content">
+        <div class="info-section">
+            <h2>Почему выбирают нас?</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Высокие коэффициенты</h3>
+                    <p>Лучшие коэффициенты на рынке ставок</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Мгновенные выплаты</h3>
+                    <p>Вывод средств за 5 минут</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Безопасность</h3>
+                    <p>Ваши данные под надежной защитой</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📱</div>
+                    <h3>Удобный интерфейс</h3>
+                    <p>Простой и интуитивно понятный дизайн</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">Активных игроков</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Забегов ежедневно</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Время безотказной работы</div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Авторизованный пользователь -->
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Добро пожаловать, {{ user.username }}! 🎠</h1>
+            <p class="dashboard-subtitle">Управляйте своими ставками и следите за забегами</p>
         </div>
         
-        <!-- Остальной код забега -->
+        <div class="stats-grid">
+            <<div class="stat-card clickable" onclick="location.href='{% url 'deposit' %}'">
+    <div class="stat-icon">💰</div>
+    <div class="stat-info">
+        <h3>Баланс</h3>
+        <p class="stat-value">{{ user.profile.balance|default:"0" }} ₽</p>
     </div>
-    {% endfor %}
-</section>
+    <div class="stat-action">Пополнить →</div>
+</div>
 
-<!-- JavaScript для обновления таймеров -->
-<script>
-function updateTimers() {
-    const timers = document.querySelectorAll('.race-timer');
-    timers.forEach(timer => {
-        const datetime = new Date(timer.getAttribute('data-datetime'));
-        const now = new Date();
-        const diff = datetime - now;
-        
-        if (diff > 0) {
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            timer.textContent = `через ${hours}ч ${minutes}м`;
-        } else {
-            timer.textContent = 'начался';
-            timer.style.color = '#e74c3c';
-        }
-    });
-}
+            
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-info">
+                    <h3>Активные ставки</h3>
+                    <p class="stat-value">{{ active_bets_count|default:"0" }}</p>
+                </div>
+                <a href="{% url 'place_bet' %}" class="btn btn-small">Сделать ставку</a>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <h3>Выиграно</h3>
+                    <p class="stat-value">{{ total_won|default:"0" }} ₽</p>
+                </div>
+                <a href="#" class="btn btn-small">История</a>
+            </div>
+        </div>
 
-// Обновляем таймеры каждую минуту
-setInterval(updateTimers, 60000);
-updateTimers(); // Первоначальный запуск
-</script>
+        <!-- Ближайшие забеги -->
+        <div class="races-section">
+            <h2>🏇 Ближайшие забеги</h2>
+            <div class="race-cards">
+                <div class="race-card">
+                    <h3>Кубок Осени 2025</h3>
+                    <div class="race-time">Старт: 11.11.2025 в 18:57</div>
+                    <div class="race-status">Запланирован через 22ч 49м</div>
+                    <a href="{% url 'place_bet' %}" class="btn btn-race">Сделать ставку</a>
+                </div>
+                <div class="race-card">
+                    <h3>Золотой Галоп 2025</h3>
+                    <div class="race-time">Старт: 12.11.2025 в 18:57</div>
+                    <div class="race-status">Запланирован через 46ч 49м</div>
+                    <a href="{% url 'place_bet' %}" class="btn btn-race">Сделать ставку</a>
+                </div>
+                <div class="race-card">
+                    <h3>Весенний Спринт 2025</h3>
+                    <div class="race-time">Старт: 15.11.2025 в 18:57</div>
+                    <div class="race-status">Запланирован через 119ч 49м</div>
+                    <a href="{% url 'place_bet' %}" class="btn btn-race">Сделать ставку</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
