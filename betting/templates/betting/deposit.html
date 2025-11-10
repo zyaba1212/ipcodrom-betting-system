@@ -1,0 +1,34 @@
+{% extends "betting/base.html" %}
+
+{% block title %}Пополнение счета - Ипподром{% endblock %}
+
+{% block content %}
+<div class="deposit-container">
+    <h2>💳 Пополнение счета</h2>
+    
+    <div class="balance-info">
+        <p>Текущий баланс: <strong>{{ user.profile.balance }}₽</strong></p>
+    </div>
+    
+    <form method="post" class="deposit-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="amount">Сумма пополнения (₽):</label>
+            <input type="number" id="amount" name="amount" min="10" step="10" required>
+            <small>Минимальная сумма: 10₽</small>
+        </div>
+        
+        <button type="submit" class="btn-primary">Пополнить счет</button>
+    </form>
+    
+    <div class="deposit-methods">
+        <h3>Способы пополнения:</h3>
+        <ul>
+            <li>💳 Банковская карта</li>
+            <li>📱 Электронные кошельки</li>
+            <li>🏦 Интернет-банкинг</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

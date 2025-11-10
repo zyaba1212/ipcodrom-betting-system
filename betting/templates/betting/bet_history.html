@@ -1,38 +1,39 @@
-{% extends 'betting/base.html' %}
+{% extends "betting/base.html" %}
+
+{% block title %}История ставок - Ипподром{% endblock %}
 
 {% block content %}
-<h2>История моих ставок</h2>
-
-{% if bets %}
-<table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
-    <thead>
-        <tr style="background: #f8f9fa;">
-            <th style="padding: 0.5rem; border: 1px solid #ddd;">Забег</th>
-            <th style="padding: 0.5rem; border: 1px solid #ddd;">Лошадь</th>
-            <th style="padding: 0.5rem; border: 1px solid #ddd;">Тип ставки</th>
-            <th style="padding: 0.5rem; border: 1px solid #ddd;">Сумма</th>
-            <th style="padding: 0.5rem; border: 1px solid #ddd;">Потенциальный выигрыш</th>
-            <th style="padding: 0.5rem; border: 1px solid #ddd;">Статус</th>
-            <th style="padding: 0.5rem; border: 1px solid #ddd;">Дата</th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="history-container">
+    <h2>📊 История ваших ставок</h2>
+    
+    {% if bets %}
+    <div class="bets-list">
         {% for bet in bets %}
-        <tr>
-            <td style="padding: 0.5rem; border: 1px solid #ddd;">{{ bet.race_participant.race.title }}</td>
-            <td style="padding: 0.5rem; border: 1px solid #ddd;">{{ bet.race_participant.horse.name }}</td>
-            <td style="padding: 0.5rem; border: 1px solid #ddd;">{{ bet.get_bet_type_display }}</td>
-            <td style="padding: 0.5rem; border: 1px solid #ddd;">{{ bet.amount }} руб.</td>
-            <td style="padding: 0.5rem; border: 1px solid #ddd;">{{ bet.potential_win }} руб.</td>
-            <td style="padding: 0.5rem; border: 1px solid #ddd;">{{ bet.status }}</td>
-            <td style="padding: 0.5rem; border: 1px solid #ddd;">{{ bet.created_at }}</td>
-        </tr>
+        <div class="bet-card {% if bet.status == 'won' %}won{% elif bet.status == 'lost' %}lost{% else %}active{% endif %}">
+            <div class="bet-header">
+                <h4>{{ bet.race.name }}</h4>
+                <span class="bet-status {{ bet.status }}">
+                    {% if bet.status == 'active' %}Активна{% endif %}
+                    {% if bet.status == 'won' %}Выиграна{% endif %}
+                    {% if bet.status == 'lost' %}Проиграна{% endif %}
+                </span>
+            </div>
+            
+            <div class="bet-details">
+                <p><strong>Лошадь:</strong> {{ bet.horse.name }}</p>
+                <p><strong>Сумма ставки:</strong> {{ bet.amount }}₽</p>
+                <p><strong>Коэффициент:</strong> {{ bet.horse.odds }}</p>
+                <p><strong>Потенциальный выигрыш:</strong> {{ bet.potential_win }}₽</p>
+                <p><strong>Дата ставки:</strong> {{ bet.created_at|date:"d.m.Y H:i" }}</p>
+            </div>
+        </div>
         {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p>У вас еще нет ставок.</p>
-{% endif %}
-
-<a href="{% url 'home' %}" class="btn">← На главную</a>
+    </div>
+    {% else %}
+    <div class="no-bets">
+        <p>У вас пока нет ставок.</p>
+        <a href="{% url 'place_bet' %}" class="btn-primary">Сделать первую ставку</a>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

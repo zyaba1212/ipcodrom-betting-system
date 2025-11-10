@@ -1,87 +1,90 @@
 from django.db import models
 from django.contrib.auth.models import User
-from decimal import Decimal
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=1000.00)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.balance}₽"
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+class Horse(models.Model):
+    name = models.CharField(max_length=100)
+    breed = models.CharField(max_length=50)
+    age = models.IntegerField()
+    owner = models.CharField(max_length=100)
+    odds = models.DecimalField(max_digits=5, decimal_places=2)
+    min_bet = models.DecimalField(max_digits=8, decimal_places=2, default=10.00)
+
+    def __str__(self):
+        return f"{self.name} ({self.odds})"
 
 class Race(models.Model):
     STATUS_CHOICES = [
         ('scheduled', 'Запланирован'),
-        ('in_progress', 'В процессе'),
-        ('completed', 'Завершен'),
+        ('ongoing', 'В процессе'),
+        ('finished', 'Завершен'),
         ('cancelled', 'Отменен'),
     ]
-    
-    title = models.CharField(max_length=200, verbose_name="Название забега")
-    scheduled_time = models.DateTimeField(verbose_name="Время проведения")
-    distance = models.IntegerField(verbose_name="Дистанция (метры)")
-    prize_pool = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Призовой фонд")
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled', verbose_name="Статус")
-    
-    def __str__(self):
-        return self.title
-        
-    def formatted_time(self):
-        """Красивое отображение даты и времени"""
-        return self.scheduled_time.strftime("%d.%m.%Y в %H:%M")
 
-class Horse(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Кличка лошади")
-    breed = models.CharField(max_length=100, verbose_name="Порода", default='Unknown')  # Добавьте default
-    age = models.IntegerField(verbose_name="Возраст")
-    
+    name = models.CharField(max_length=200)
+    date_time = models.DateTimeField()
+    distance = models.IntegerField(help_text="Дистанция в метрах")
+    prize_pool = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
+    horses = models.ManyToManyField(Horse, through='RaceParticipant')
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.name
 
-class Jockey(models.Model):
-    first_name = models.CharField(max_length=100, verbose_name="Имя")
-    last_name = models.CharField(max_length=100, verbose_name="Фамилия")
-    license_number = models.CharField(max_length=50, verbose_name="Номер лицензии")
-    
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
 class RaceParticipant(models.Model):
-    race = models.ForeignKey(Race, on_delete=models.CASCADE, verbose_name="Забег")
-    horse = models.ForeignKey(Horse, on_delete=models.CASCADE, verbose_name="Лошадь")
-    jockey = models.ForeignKey(Jockey, on_delete=models.CASCADE, verbose_name="Жокей")
-    lane_number = models.IntegerField(verbose_name="Номер дорожки")
-    win_odds = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Коэффициент на победу")
-    
-    def __str__(self):
-        return f"{self.horse.name} (Дорожка {self.lane_number})"
+    race = models.ForeignKey(Race, on_delete=models.CASCADE)
+    horse = models.ForeignKey(Horse, on_delete=models.CASCADE)
+    position = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ['race', 'horse']
 
 class Bet(models.Model):
-    BET_TYPES = [
-        ('win', 'На победу'),
-        ('place', 'На показ'),
-        ('show', 'На третье место'),
-    ]
-    
-    STATUS_CHOICES = [
+    BET_STATUS = [
         ('active', 'Активна'),
-        ('won', 'Выиграла'),
-        ('lost', 'Проиграла'),
+        ('won', 'Выиграна'),
+        ('lost', 'Проиграна'),
         ('cancelled', 'Отменена'),
     ]
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
-    race_participant = models.ForeignKey(RaceParticipant, on_delete=models.CASCADE, verbose_name="Участник забега")
-    bet_type = models.CharField(max_length=10, choices=BET_TYPES, verbose_name="Тип ставки")
-    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Сумма ставки")
-    potential_win = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Потенциальный выигрыш")
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active', verbose_name="Статус ставки")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
-    
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    race = models.ForeignKey(Race, on_delete=models.CASCADE)
+    horse = models.ForeignKey(Horse, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    potential_win = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=BET_STATUS, default='active')
+    created_at = models.DateTimeField(auto_now_add=True)
+    settled_at = models.DateTimeField(null=True, blank=True)
+
     def save(self, *args, **kwargs):
-        # Расчет потенциального выигрыша
-        from decimal import Decimal
-        if self.bet_type == 'win':
-            self.potential_win = Decimal(float(self.amount) * float(self.race_participant.win_odds))
-        elif self.bet_type == 'place':
-            self.potential_win = Decimal(float(self.amount) * 1.8)  # Упрощенный коэффициент
-        elif self.bet_type == 'show':
-            self.potential_win = Decimal(float(self.amount) * 1.5)  # Упрощенный коэффициент
-        
+        # Автоматически рассчитываем потенциальный выигрыш
+        self.potential_win = self.amount * self.horse.odds
         super().save(*args, **kwargs)
-    
+
     def __str__(self):
-        return f"Ставка {self.user.username} на {self.race_participant.horse.name} - {self.amount} руб."
+        return f"{self.user.username} - {self.amount}₽ на {self.horse.name}"
+
+class Bonus(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    reason = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)

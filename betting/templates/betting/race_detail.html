@@ -1,27 +1,57 @@
-{% extends 'betting/base.html' %}
+{% extends "betting/base.html" %}
+
+{% block title %}{{ race.name }} - Ипподром{% endblock %}
 
 {% block content %}
-<div class="race-header">
-    <h2>{{ race.title }}</h2>
-    <p><strong>Время:</strong> {{ race.scheduled_time }}</p>
-    <p><strong>Дистанция:</strong> {{ race.distance }} м</p>
-    <p><strong>Призовой фонд:</strong> {{ race.prize_pool }} руб.</p>
-    <p><strong>Статус:</strong> {{ race.get_status_display }}</p>
-</div>
-
-<h3>Участники забега</h3>
-<div class="participants-list">
-    {% for participant in participants %}
-    <div class="participant-card">
-        <h4>{{ participant.horse.name }} (Дорожка {{ participant.lane_number }})</h4>
-        <p><strong>Жокей:</strong> {{ participant.jockey.first_name }} {{ participant.jockey.last_name }}</p>
-        <p><strong>Коэффициент на победу:</strong> {{ participant.win_odds }}</p>
-        <a href="{% url 'place_bet' participant.id %}" class="btn-bet">
-            Сделать ставку
-        </a>
+<div class="race-detail-container">
+    <h2>{{ race.name }}</h2>
+    
+    <div class="race-info">
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>⏰ Время:</strong>
+                <span>{{ race.date_time|date:"d.m.Y в H:i" }}</span>
+            </div>
+            <div class="info-item">
+                <strong>📏 Дистанция:</strong>
+                <span>{{ race.distance }} м</span>
+            </div>
+            <div class="info-item">
+                <strong>💰 Призовой фонд:</strong>
+                <span>{{ race.prize_pool }}₽</span>
+            </div>
+            <div class="info-item">
+                <strong>📊 Статус:</strong>
+                <span class="status-{{ race.status }}">{{ race.get_status_display }}</span>
+            </div>
+        </div>
     </div>
-    {% endfor %}
+    
+    <div class="participants">
+        <h3>🐎 Участники забега</h3>
+        <div class="horses-grid">
+            {% for horse in race.horses.all %}
+            <div class="horse-card">
+                <h4>{{ horse.name }}</h4>
+                <p><strong>Порода:</strong> {{ horse.breed }}</p>
+                <p><strong>Возраст:</strong> {{ horse.age }} лет</p>
+                <p><strong>Владелец:</strong> {{ horse.owner }}</p>
+                <p><strong>Коэффициент:</strong> {{ horse.odds }}</p>
+                <p><strong>Мин. ставка:</strong> {{ horse.min_bet }}₽</p>
+                
+                {% if user.is_authenticated %}
+                <a href="{% url 'place_bet_race' race.id %}" class="btn-primary">
+                    Сделать ставку на {{ horse.name }}
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="actions">
+        <a href="{% url 'place_bet_race' race.id %}" class="btn-primary">Сделать ставку на этот забег</a>
+        <a href="{% url 'home' %}" class="btn-secondary">Назад к списку забегов</a>
+    </div>
 </div>
-
-<a href="{% url 'home' %}" class="btn">← Назад к расписанию</a>
 {% endblock %}
