@@ -1,17 +1,44 @@
 {% extends 'betting/base.html' %}
 
+{% block title %}Главная - Ипподром{% endblock %}
+
 {% block content %}
+<h1>🏇 Добро пожаловать на Ипподром!</h1>
+
 <h2>Ближайшие забеги</h2>
 
-{% for race in races %}
-<div class="race-card">
-    <h3>{{ race.title }}</h3>
-    <p><strong>Время:</strong> {{ race.scheduled_time }}</p>
-    <p><strong>Дистанция:</strong> {{ race.distance }} м</p>
-    <p><strong>Призовой фонд:</strong> {{ race.prize_pool }} руб.</p>
-    <a href="{% url 'race_detail' race.id %}" class="btn">Подробнее</a>
+<div class="races-grid">
+    <div class="race-card">
+        <h3>🏆 Кубок Осени 2025</h3>
+        <div class="race-info">
+            <p><strong>📅 Время:</strong> 11.11.2025 в 15:00</p>
+            <p><strong>📏 Дистанция:</strong> 1600 м</p>
+            <p class="prize-pool"><strong>💰 Призовой фонд:</strong> 100,000.00 руб.</p>
+            <p><strong>📊 Статус:</strong> <span class="status-scheduled">Запланирован</span></p>
+        </div>
+        <a href="{% url 'race_detail' 1 %}" class="btn-details">Подробнее и ставки</a>
+    </div>
+
+    <div class="race-card">
+        <h3>⭐ Золотой Галоп 2025</h3>
+        <div class="race-info">
+            <p><strong>📅 Время:</strong> 12.11.2025 в 14:30</p>
+            <p><strong>📏 Дистанция:</strong> 2000 м</p>
+            <p class="prize-pool"><strong>💰 Призовой фонд:</strong> 150,000.00 руб.</p>
+            <p><strong>📊 Статус:</strong> <span class="status-scheduled">Запланирован</span></p>
+        </div>
+        <a href="{% url 'race_detail' 2 %}" class="btn-details">Подробнее и ставки</a>
+    </div>
+
+    <div class="race-card">
+        <h3>⚡ Весенний Спринт 2025</h3>
+        <div class="race-info">
+            <p><strong>📅 Время:</strong> 15.11.2025 в 16:00</p>
+            <p><strong>📏 Дистанция:</strong> 1200 м</p>
+            <p class="prize-pool"><strong>💰 Призовой фонд:</strong> 80,000.00 руб.</p>
+            <p><strong>📊 Статус:</strong> <span class="status-scheduled">Запланирован</span></p>
+        </div>
+        <a href="{% url 'race_detail' 3 %}" class="btn-details">Подробнее и ставки</a>
+    </div>
 </div>
-{% empty %}
-<p>Нет предстоящих забегов</p>
-{% endfor %}
 {% endblock %}

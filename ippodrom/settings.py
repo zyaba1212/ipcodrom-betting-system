@@ -116,7 +116,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+# Папка где collectstatic будет собирать все статические файлы
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Папки с исходными статическими файлами
+STATICFILES_DIRS = [
+    BASE_DIR / 'betting' / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
