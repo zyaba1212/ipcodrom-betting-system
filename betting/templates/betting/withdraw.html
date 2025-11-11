@@ -1,0 +1,48 @@
+{% extends 'betting/base.html' %}
+
+{% block title %}Вывод средств - Система ставок{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 400px; margin: 2rem auto;">
+    <div class="card-header">
+        <h1 class="card-title" style="text-align: center;">Вывод средств</h1>
+    </div>
+
+    <div class="balance-info" style="text-align: center; margin-bottom: 1.5rem;">
+        <p>Доступно для вывода: <strong>{{ user_profile.balance }} ₽</strong></p>
+    </div>
+
+    <form method="post" class="transaction-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="amount" class="form-label">Сумма вывода (₽):</label>
+            <input type="number" name="amount" id="amount" class="form-control" 
+                   min="100" max="{{ user_profile.balance }}" step="0.01" required>
+            <small>Минимальная сумма: 100 ₽</small>
+        </div>
+
+        <div class="form-group">
+            <label for="method" class="form-label">Способ вывода:</label>
+            <select name="method" id="method" class="form-control" required>
+                <option value="">Выберите способ</option>
+                <option value="bank_card">Банковская карта</option>
+                <option value="electronic">Электронный кошелек</option>
+                <option value="bank_transfer">Банковский перевод</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="details" class="form-label">Реквизиты:</label>
+            <input type="text" name="details" id="details" class="form-control" 
+                   placeholder="Номер карты/кошелька/счета" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Запросить вывод</button>
+    </form>
+
+    <div class="back-link" style="text-align: center; margin-top: 1rem;">
+        <a href="{% url 'betting:home' %}">← Назад на главную</a>
+    </div>
+</div>
+{% endblock %}

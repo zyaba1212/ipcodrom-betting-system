@@ -1,0 +1,66 @@
+{% extends 'betting/base.html' %}
+
+{% block title %}Ставка на {{ race.name }} - Система ставок{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">Ставка на забег: {{ race.name }}</h1>
+    </div>
+
+    <div class="race-info">
+        <p><strong>Время забега:</strong> {{ race.start_time }}</p>
+        <p><strong>Статус:</strong> {{ race.get_status_display }}</p>
+        <p><strong>Ваш баланс:</strong> <span class="user-balance">{{ user_profile.balance }} ₽</span></p>
+    </div>
+
+    <form method="post" class="bet-form" data-race-id="{{ race.id }}">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label class="form-label">Выберите лошадь:</label>
+            <div class="horse-selection">
+                {% for horse in horses %}
+                <div class="horse-option">
+                    <input type="radio" name="horse_id" value="{{ horse.id }}" id="horse_{{ horse.id }}" 
+                           data-odds="{{ horse.odds }}" required>
+                    <label for="horse_{{ horse.id }}" class="horse-item">
+                        <div class="horse-info">
+                            <span class="horse-name">{{ horse.name }}</span>
+                            <span class="horse-color">{{ horse.color }}</span>
+                        </div>
+                        <div class="horse-odds">{{ horse.odds }}</div>
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="bet_type" class="form-label">Тип ставки:</label>
+            <select name="bet_type" id="bet_type" class="form-control">
+                <option value="win">На победу</option>
+                <option value="place">На место</option>
+                <option value="show">На показ</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="amount" class="form-label">Сумма ставки (₽):</label>
+            <input type="number" name="amount" id="amount" class="form-control" 
+                   min="10" max="{{ user_profile.balance }}" step="0.01" required>
+            <small>Минимальная ставка: 10 ₽</small>
+        </div>
+
+        <div class="bet-summary">
+            <p><strong>Потенциальный выигрыш:</strong> <span class="potential-win">0 ₽</span></p>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-block">Разместить ставку</button>
+    </form>
+
+    <div class="back-link">
+        <a href="{% url 'betting:place_bet' %}" class="btn btn-primary">← Назад к забегам</a>
+    </div>
+</div>
+{% endblock %}

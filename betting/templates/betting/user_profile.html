@@ -1,0 +1,54 @@
+{% extends 'betting/base.html' %}
+
+{% block title %}Профиль - Система ставок{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">Профиль пользователя</h1>
+    </div>
+
+    <div class="profile-info">
+        <div class="profile-section">
+            <h2>Личная информация</h2>
+            <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Дата регистрации:</strong> {{ user.date_joined|date:"d.m.Y" }}</p>
+        </div>
+
+        <div class="profile-section">
+            <h2>Финансы</h2>
+            <p><strong>Текущий баланс:</strong> {{ user_profile.balance }} ₽</p>
+            <div class="finance-actions">
+                <a href="{% url 'betting:deposit' %}" class="btn btn-success">Пополнить</a>
+                <a href="{% url 'betting:withdraw' %}" class="btn btn-primary">Вывести</a>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2>Последние ставки</h2>
+            {% if recent_bets %}
+            <div class="recent-bets">
+                {% for bet in recent_bets %}
+                <div class="bet-item">
+                    <span class="bet-race">{{ bet.race.name }}</span>
+                    <span class="bet-horse">{{ bet.horse.name }}</span>
+                    <span class="bet-amount">{{ bet.amount }} ₽</span>
+                    <span class="bet-status {% if bet.is_winner %}status-won{% else %}status-lost{% endif %}">
+                        {% if bet.is_settled %}
+                            {% if bet.is_winner %}Выиграна{% else %}Проиграна{% endif %}
+                        {% else %}
+                            Ожидает
+                        {% endif %}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>У вас еще нет ставок.</p>
+            {% endif %}
+            <a href="{% url 'betting:bet_history' %}" class="btn btn-secondary">Вся история</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

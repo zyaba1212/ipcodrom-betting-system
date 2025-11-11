@@ -1,53 +1,67 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Ставки на лошадиные бега - Ипподром">
-    <title>{% block title %}Ипподром - Ставки на забеги{% endblock %}</title>
+    <title>{% block title %}Система ставок на ипподроме{% endblock %}</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'betting/css/style.css' %}">
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">
-                    <h2>🎠 Ипподром</h2>
-                </a>
+                <a href="{% url 'betting:home' %}">Ипподром</a>
             </div>
-            <div class="nav-links">
+            <div class="nav-menu">
+                <a href="{% url 'betting:home' %}" class="nav-link">Главная</a>
+                <a href="{% url 'betting:place_bet' %}" class="nav-link">Ставки</a>
                 {% if user.is_authenticated %}
-                    <span class="user-info">Привет, {{ user.username }}!</span>
-                    <a href="{% url 'place_bet' %}" class="nav-link">Сделать ставку</a>
-                    <a href="{% url 'bet_history' %}" class="nav-link">История ставок</a>
-                    <a href="{% url 'deposit' %}" class="nav-link">Пополнить счет</a>
-                    <a href="{% url 'logout' %}" class="nav-link">Выйти</a>
+                    <a href="{% url 'betting:bet_history' %}" class="nav-link">История</a>
+                    <a href="{% url 'betting:user_stats' %}" class="nav-link">Статистика</a>
+                    <div class="user-info">
+                        <a href="{% url 'betting:transaction_history' %}" class="username">{{ user.username }}</a>
+                        <a href="{% url 'betting:deposit' %}" class="balance">{{ user.betting_profile.balance }} ₽</a>
+                    </div>
+                    <a href="{% url 'betting:withdraw' %}" class="nav-link">Вывод</a>
+                    <a href="#image-showcase" class="nav-link">Просмотр фона</a>
+                    <a href="{% url 'betting:logout' %}" class="nav-link logout">Выйти</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="nav-link">Вход</a>
-                    <a href="{% url 'register' %}" class="nav-link">Регистрация</a>
+                    <a href="{% url 'betting:login' %}" class="nav-link">Войти</a>
+                    <a href="{% url 'betting:register' %}" class="nav-link register">Регистрация</a>
                 {% endif %}
             </div>
         </div>
     </nav>
 
-    <div class="content-wrapper">
+    <main class="main-content">
         {% if messages %}
+        <div class="messages">
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
+            <div class="message {{ message.tags }}">{{ message }}</div>
             {% endfor %}
+        </div>
         {% endif %}
 
-        <main>
-            {% block content %}
-            {% endblock %}
-        </main>
-    </div>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Image Showcase Section -->
+    <section id="image-showcase" class="full-image-showcase">
+        <div class="showcase-content">
+            <h1 class="showcase-title">Виртуальный Ипподром</h1>
+            <p class="showcase-subtitle">Лучшие скачки и ставки</p>
+        </div>
+    </section>
 
     <footer class="footer">
-        <p>&copy; 2025 Ипподром. Все права защищены.</p>
+        <div class="footer-container">
+            <p>&copy; 2024 Система ставок на ипподроме. Все права защищены.</p>
+            <a href="{% url 'betting:terms' %}">Правила и условия</a>
+        </div>
     </footer>
+
+    <script src="{% static 'betting/js/betting.js' %}"></script>
 </body>
 </html>

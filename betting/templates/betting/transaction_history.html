@@ -1,0 +1,69 @@
+{% extends 'betting/base.html' %}
+
+{% block title %}История операций - Система ставок{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">История операций</h1>
+    </div>
+
+    <div class="transaction-stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ deposit_total }} ₽</div>
+                <div class="stat-label">Всего пополнено</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ withdraw_total }} ₽</div>
+                <div class="stat-label">Всего выведено</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ win_total }} ₽</div>
+                <div class="stat-label">Всего выиграно</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ bet_total }} ₽</div>
+                <div class="stat-label">Всего поставлено</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Тип операции</th>
+                    <th>Сумма</th>
+                    <th>Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <span class="transaction-type {{ transaction.transaction_type }}">
+                            {{ transaction.get_transaction_type_display }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if transaction.transaction_type == 'deposit' or transaction.transaction_type == 'win' %}
+                        <span class="amount-positive">+{{ transaction.amount }} ₽</span>
+                        {% else %}
+                        <span class="amount-negative">-{{ transaction.amount }} ₽</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ transaction.description }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Нет операций</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

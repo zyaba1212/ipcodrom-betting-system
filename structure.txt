@@ -1,0 +1,283 @@
+‘âàãªâãà  ¯ ¯®ª
+‘¥à¨©­ë© ­®¬¥à â®¬ : 4A60-D782
+C:.
+³   db.sqlite3
+³   manage.py
+³   structure.txt
+³   user_profile.balance
+³   
+ÃÄÄÄbetting
+³   ³   admin.py
+³   ³   apps.py
+³   ³   forms.py
+³   ³   models.py
+³   ³   notifications.py
+³   ³   services.py
+³   ³   tests.py
+³   ³   urls.py
+³   ³   views.py
+³   ³   __init__.py
+³   ³   
+³   ÃÄÄÄmanagement
+³   ³   ÀÄÄÄcommands
+³   ³       ³   create_test_data.py
+³   ³       ³   
+³   ³       ÀÄÄÄ__pycache__
+³   ³               create_test_data.cpython-314.pyc
+³   ³               
+³   ÃÄÄÄmigrations
+³   ³   ³   0001_initial.py
+³   ³   ³   __init__.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           0001_initial.cpython-314.pyc
+³   ³           0002_alter_raceparticipant_unique_together_and_more.cpython-314.pyc
+³   ³           0002_initial.cpython-314.pyc
+³   ³           0002_userprofile_updated_at.cpython-314.pyc
+³   ³           0003_remove_bet_settled_at_remove_horse_age_and_more.cpython-314.pyc
+³   ³           __init__.cpython-314.pyc
+³   ³           
+³   ÃÄÄÄstatic
+³   ³   ÀÄÄÄbetting
+³   ³       ÃÄÄÄcss
+³   ³       ³       style.css
+³   ³       ³       
+³   ³       ÃÄÄÄimages
+³   ³       ³   ÀÄÄÄbackgrounds
+³   ³       ³           background1.jpg
+³   ³       ³           
+³   ³       ÀÄÄÄjs
+³   ³               betting.js
+³   ³               
+³   ÃÄÄÄtemplates
+³   ³   ÀÄÄÄbetting
+³   ³           base.html
+³   ³           bet_history.html
+³   ³           deposit.html
+³   ³           home.html
+³   ³           login.html
+³   ³           place_bet.html
+³   ³           place_bet_race.html
+³   ³           register.html
+³   ³           terms.html
+³   ³           user_stats.html
+³   ³           withdraw.html
+³   ³           
+³   ÃÄÄÄtemplatetags
+³   ³   ³   betting_extras.py
+³   ³   ³   
+³   ³   ÀÄÄÄ__pycache__
+³   ³           betting_extras.cpython-314.pyc
+³   ³           
+³   ÀÄÄÄ__pycache__
+³           admin.cpython-314.pyc
+³           apps.cpython-314.pyc
+³           forms.cpython-314.pyc
+³           models.cpython-314.pyc
+³           notifications.cpython-314.pyc
+³           services.cpython-314.pyc
+³           urls.cpython-314.pyc
+³           views.cpython-314.pyc
+³           __init__.cpython-314.pyc
+³           
+ÃÄÄÄippodrom
+³   ³   asgi.py
+³   ³   settings.py
+³   ³   urls.py
+³   ³   wsgi.py
+³   ³   __init__.py
+³   ³   
+³   ÀÄÄÄ__pycache__
+³           settings.cpython-314.pyc
+³           urls.cpython-314.pyc
+³           wsgi.cpython-314.pyc
+³           __init__.cpython-314.pyc
+³           
+ÃÄÄÄstaticfiles
+³   ÃÄÄÄadmin
+³   ³   ÃÄÄÄcss
+³   ³   ³   ³   autocomplete.css
+³   ³   ³   ³   base.css
+³   ³   ³   ³   changelists.css
+³   ³   ³   ³   dark_mode.css
+³   ³   ³   ³   dashboard.css
+³   ³   ³   ³   forms.css
+³   ³   ³   ³   login.css
+³   ³   ³   ³   nav_sidebar.css
+³   ³   ³   ³   responsive.css
+³   ³   ³   ³   responsive_rtl.css
+³   ³   ³   ³   rtl.css
+³   ³   ³   ³   unusable_password_field.css
+³   ³   ³   ³   widgets.css
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄvendor
+³   ³   ³       ÀÄÄÄselect2
+³   ³   ³               LICENSE-SELECT2.md
+³   ³   ³               select2.css
+³   ³   ³               select2.min.css
+³   ³   ³               
+³   ³   ÃÄÄÄimg
+³   ³   ³   ³   calendar-icons.svg
+³   ³   ³   ³   icon-addlink.svg
+³   ³   ³   ³   icon-alert.svg
+³   ³   ³   ³   icon-calendar.svg
+³   ³   ³   ³   icon-changelink.svg
+³   ³   ³   ³   icon-clock.svg
+³   ³   ³   ³   icon-deletelink.svg
+³   ³   ³   ³   icon-hidelink.svg
+³   ³   ³   ³   icon-no.svg
+³   ³   ³   ³   icon-unknown-alt.svg
+³   ³   ³   ³   icon-unknown.svg
+³   ³   ³   ³   icon-viewlink.svg
+³   ³   ³   ³   icon-yes.svg
+³   ³   ³   ³   inline-delete.svg
+³   ³   ³   ³   LICENSE
+³   ³   ³   ³   README.txt
+³   ³   ³   ³   search.svg
+³   ³   ³   ³   selector-icons.svg
+³   ³   ³   ³   sorting-icons.svg
+³   ³   ³   ³   tooltag-add.svg
+³   ³   ³   ³   tooltag-arrowright.svg
+³   ³   ³   ³   
+³   ³   ³   ÀÄÄÄgis
+³   ³   ³           move_vertex_off.svg
+³   ³   ³           move_vertex_on.svg
+³   ³   ³           
+³   ³   ÀÄÄÄjs
+³   ³       ³   actions.js
+³   ³       ³   autocomplete.js
+³   ³       ³   calendar.js
+³   ³       ³   cancel.js
+³   ³       ³   change_form.js
+³   ³       ³   core.js
+³   ³       ³   filters.js
+³   ³       ³   inlines.js
+³   ³       ³   jquery.init.js
+³   ³       ³   nav_sidebar.js
+³   ³       ³   popup_response.js
+³   ³       ³   prepopulate.js
+³   ³       ³   prepopulate_init.js
+³   ³       ³   SelectBox.js
+³   ³       ³   SelectFilter2.js
+³   ³       ³   theme.js
+³   ³       ³   unusable_password_field.js
+³   ³       ³   urlify.js
+³   ³       ³   
+³   ³       ÃÄÄÄadmin
+³   ³       ³       DateTimeShortcuts.js
+³   ³       ³       RelatedObjectLookups.js
+³   ³       ³       
+³   ³       ÀÄÄÄvendor
+³   ³           ÃÄÄÄjquery
+³   ³           ³       jquery.js
+³   ³           ³       jquery.min.js
+³   ³           ³       LICENSE.txt
+³   ³           ³       
+³   ³           ÃÄÄÄselect2
+³   ³           ³   ³   LICENSE.md
+³   ³           ³   ³   select2.full.js
+³   ³           ³   ³   select2.full.min.js
+³   ³           ³   ³   
+³   ³           ³   ÀÄÄÄi18n
+³   ³           ³           af.js
+³   ³           ³           ar.js
+³   ³           ³           az.js
+³   ³           ³           bg.js
+³   ³           ³           bn.js
+³   ³           ³           bs.js
+³   ³           ³           ca.js
+³   ³           ³           cs.js
+³   ³           ³           da.js
+³   ³           ³           de.js
+³   ³           ³           dsb.js
+³   ³           ³           el.js
+³   ³           ³           en.js
+³   ³           ³           es.js
+³   ³           ³           et.js
+³   ³           ³           eu.js
+³   ³           ³           fa.js
+³   ³           ³           fi.js
+³   ³           ³           fr.js
+³   ³           ³           gl.js
+³   ³           ³           he.js
+³   ³           ³           hi.js
+³   ³           ³           hr.js
+³   ³           ³           hsb.js
+³   ³           ³           hu.js
+³   ³           ³           hy.js
+³   ³           ³           id.js
+³   ³           ³           is.js
+³   ³           ³           it.js
+³   ³           ³           ja.js
+³   ³           ³           ka.js
+³   ³           ³           km.js
+³   ³           ³           ko.js
+³   ³           ³           lt.js
+³   ³           ³           lv.js
+³   ³           ³           mk.js
+³   ³           ³           ms.js
+³   ³           ³           nb.js
+³   ³           ³           ne.js
+³   ³           ³           nl.js
+³   ³           ³           pl.js
+³   ³           ³           ps.js
+³   ³           ³           pt-BR.js
+³   ³           ³           pt.js
+³   ³           ³           ro.js
+³   ³           ³           ru.js
+³   ³           ³           sk.js
+³   ³           ³           sl.js
+³   ³           ³           sq.js
+³   ³           ³           sr-Cyrl.js
+³   ³           ³           sr.js
+³   ³           ³           sv.js
+³   ³           ³           th.js
+³   ³           ³           tk.js
+³   ³           ³           tr.js
+³   ³           ³           uk.js
+³   ³           ³           vi.js
+³   ³           ³           zh-CN.js
+³   ³           ³           zh-TW.js
+³   ³           ³           
+³   ³           ÀÄÄÄxregexp
+³   ³                   LICENSE.txt
+³   ³                   xregexp.js
+³   ³                   xregexp.min.js
+³   ³                   
+³   ÀÄÄÄbetting
+³       ÃÄÄÄcss
+³       ³       style.css
+³       ³       
+³       ÃÄÄÄimages
+³       ³   ÀÄÄÄbackgrounds
+³       ³           background1.jpg
+³       ³           
+³       ÀÄÄÄjs
+³               betting.js
+³               
+ÀÄÄÄusers
+    ³   admin.py
+    ³   apps.py
+    ³   models.py
+    ³   tests.py
+    ³   views.py
+    ³   __init__.py
+    ³   
+    ÃÄÄÄmigrations
+    ³   ³   0001_initial.py
+    ³   ³   0002_alter_userprofile_user.py
+    ³   ³   0003_userprofile_created_at_userprofile_updated_at_and_more.py
+    ³   ³   __init__.py
+    ³   ³   
+    ³   ÀÄÄÄ__pycache__
+    ³           0001_initial.cpython-314.pyc
+    ³           0002_alter_userprofile_user.cpython-314.pyc
+    ³           0003_userprofile_created_at_userprofile_updated_at_and_more.cpython-314.pyc
+    ³           __init__.cpython-314.pyc
+    ³           
+    ÀÄÄÄ__pycache__
+            admin.cpython-314.pyc
+            apps.cpython-314.pyc
+            models.cpython-314.pyc
+            __init__.cpython-314.pyc
+            

@@ -1,38 +1,77 @@
-{% extends "betting/base.html" %}
+{% extends 'betting/base.html' %}
 
-{% block title %}История ставок - Ипподром{% endblock %}
+{% block title %}История ставок - Система ставок{% endblock %}
 
 {% block content %}
-<div class="history-container">
-    <h2>📊 История ваших ставок</h2>
-    
-    {% if bets %}
-    <div class="bets-list">
-        {% for bet in bets %}
-        <div class="bet-card {% if bet.status == 'won' %}won{% elif bet.status == 'lost' %}lost{% else %}active{% endif %}">
-            <div class="bet-header">
-                <h4>{{ bet.race.name }}</h4>
-                <span class="bet-status {{ bet.status }}">
-                    {% if bet.status == 'active' %}Активна{% endif %}
-                    {% if bet.status == 'won' %}Выиграна{% endif %}
-                    {% if bet.status == 'lost' %}Проиграна{% endif %}
-                </span>
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">История ваших ставок</h1>
+    </div>
+
+    <div class="user-stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ user_profile.balance }}</div>
+                <div class="stat-label">Текущий баланс</div>
             </div>
-            
-            <div class="bet-details">
-                <p><strong>Лошадь:</strong> {{ bet.horse.name }}</p>
-                <p><strong>Сумма ставки:</strong> {{ bet.amount }}₽</p>
-                <p><strong>Коэффициент:</strong> {{ bet.horse.odds }}</p>
-                <p><strong>Потенциальный выигрыш:</strong> {{ bet.potential_win }}₽</p>
-                <p><strong>Дата ставки:</strong> {{ bet.created_at|date:"d.m.Y H:i" }}</p>
+            <div class="stat-card">
+                <div class="stat-value">{{ bets|length }}</div>
+                <div class="stat-label">Всего ставок</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">
+                    {{ won_bets_count }}
+                </div>
+                <div class="stat-label">Выигранные</div>
             </div>
         </div>
-        {% endfor %}
+    </div>
+
+    {% if bets %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Забег</th>
+                    <th>Лошадь</th>
+                    <th>Тип</th>
+                    <th>Сумма</th>
+                    <th>Коэф.</th>
+                    <th>Выигрыш</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bet in bets %}
+                <tr>
+                    <td>{{ bet.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>{{ bet.race.name }}</td>
+                    <td>{{ bet.horse.name }}</td>
+                    <td>{{ bet.get_bet_type_display }}</td>
+                    <td>{{ bet.amount }} ₽</td>
+                    <td>{{ bet.odds }}</td>
+                    <td>{{ bet.potential_win }} ₽</td>
+                    <td>
+                        {% if bet.is_settled %}
+                            {% if bet.is_winner %}
+                            <span class="status-badge status-won">Выиграна</span>
+                            {% else %}
+                            <span class="status-badge status-lost">Проиграна</span>
+                            {% endif %}
+                        {% else %}
+                        <span class="status-badge status-pending">Ожидает</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     {% else %}
     <div class="no-bets">
-        <p>У вас пока нет ставок.</p>
-        <a href="{% url 'place_bet' %}" class="btn-primary">Сделать первую ставку</a>
+        <p>У вас еще нет ставок.</p>
+        <a href="{% url 'betting:place_bet' %}" class="btn btn-primary">Сделать первую ставку</a>
     </div>
     {% endif %}
 </div>

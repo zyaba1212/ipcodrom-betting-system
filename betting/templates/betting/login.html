@@ -1,36 +1,31 @@
-{% extends "betting/base.html" %}
+{% extends 'betting/base.html' %}
 
-{% block title %}Вход - Ипподром{% endblock %}
+{% block title %}Вход - Система ставок{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-card">
-        <div class="auth-header">
-            <h1>🎠 Вход в Ипподром</h1>
-            <p>Войдите в свой аккаунт чтобы делать ставки</p>
-        </div>
+<div class="card" style="max-width: 400px; margin: 2rem auto;">
+    <div class="card-header">
+        <h1 class="card-title" style="text-align: center;">Вход в систему</h1>
+    </div>
+
+    <form method="post" class="auth-form">
+        {% csrf_token %}
         
-        <form method="post" class="auth-form">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="username">Имя пользователя</label>
-                <input type="text" id="username" name="username" required 
-                       placeholder="Введите ваш логин">
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Пароль</label>
-                <input type="password" id="password" name="password" required 
-                       placeholder="Введите ваш пароль">
-            </div>
-            
-            <button type="submit" class="btn btn-primary btn-full">Войти в аккаунт</button>
-        </form>
-        
-        <div class="auth-footer">
-            <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь здесь</a></p>
+        <div class="form-group">
+            <label for="username" class="form-label">Имя пользователя:</label>
+            <input type="text" name="username" id="username" class="form-control" required>
         </div>
+
+        <div class="form-group">
+            <label for="password" class="form-label">Пароль:</label>
+            <input type="password" name="password" id="password" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Войти</button>
+    </form>
+
+    <div class="auth-links" style="text-align: center; margin-top: 1rem;">
+        <p>Нет аккаунта? <a href="{% url 'betting:register' %}">Зарегистрируйтесь</a></p>
     </div>
 </div>
 {% endblock %}

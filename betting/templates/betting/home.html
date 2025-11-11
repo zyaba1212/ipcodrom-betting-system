@@ -1,137 +1,202 @@
-{% extends "betting/base.html" %}
+{% extends 'betting/base.html' %}
+{% load static %}
+
+{% block title %}Главная - Система ставок{% endblock %}
 
 {% block content %}
-<div class="home-container">
-    {% if not user.is_authenticated %}
-    <!-- Гость - картинка с кнопками поверх -->
-    <div class="hero-card">
-        <div class="hero-background"></div>
-        <div class="hero-overlay">
-            <div class="hero-content">
-                <h1>Ипподром</h1>
-                <p class="hero-subtitle">Ставки на лошадиные бега</p>
-                <p class="hero-description">
-                    Профессиональная платформа для ставок с лучшими коэффициентами. 
-                    Присоединяйтесь к тысячам игроков уже сегодня.
-                </p>
-                <div class="cta-buttons">
-                    <a href="{% url 'login' %}" class="btn btn-transparent">
-                        <span>Войти в аккаунт</span>
-                    </a>
-                    <a href="{% url 'register' %}" class="btn btn-transparent">
-                        <span>Создать аккаунт</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Дополнительный контент под картинкой -->
-    <div class="additional-content">
-        <div class="info-section">
-            <h2>Почему выбирают нас?</h2>
-            <div class="features-grid">
-                <div class="feature">
-                    <div class="feature-icon">🏆</div>
-                    <h3>Высокие коэффициенты</h3>
-                    <p>Лучшие коэффициенты на рынке ставок</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Мгновенные выплаты</h3>
-                    <p>Вывод средств за 5 минут</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🛡️</div>
-                    <h3>Безопасность</h3>
-                    <p>Ваши данные под надежной защитой</p>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">📱</div>
-                    <h3>Удобный интерфейс</h3>
-                    <p>Простой и интуитивно понятный дизайн</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="stats-section">
-            <div class="stat">
-                <div class="stat-number">10K+</div>
-                <div class="stat-label">Активных игроков</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">500+</div>
-                <div class="stat-label">Забегов ежедневно</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">99.9%</div>
-                <div class="stat-label">Время безотказной работы</div>
-            </div>
-        </div>
-    </div>
-    {% else %}
-    <!-- Авторизованный пользователь -->
-    <div class="dashboard">
-        <div class="dashboard-header">
-            <h1 class="dashboard-title">Добро пожаловать, {{ user.username }}! 🎠</h1>
-            <p class="dashboard-subtitle">Управляйте своими ставками и следите за забегами</p>
-        </div>
-        
-        <div class="stats-grid">
-            <<div class="stat-card clickable" onclick="location.href='{% url 'deposit' %}'">
-    <div class="stat-icon">💰</div>
-    <div class="stat-info">
-        <h3>Баланс</h3>
-        <p class="stat-value">{{ user.profile.balance|default:"0" }} ₽</p>
-    </div>
-    <div class="stat-action">Пополнить →</div>
-</div>
-
-            
-            <div class="stat-card">
-                <div class="stat-icon">🎯</div>
-                <div class="stat-info">
-                    <h3>Активные ставки</h3>
-                    <p class="stat-value">{{ active_bets_count|default:"0" }}</p>
-                </div>
-                <a href="{% url 'place_bet' %}" class="btn btn-small">Сделать ставку</a>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">📊</div>
-                <div class="stat-info">
-                    <h3>Выиграно</h3>
-                    <p class="stat-value">{{ total_won|default:"0" }} ₽</p>
-                </div>
-                <a href="#" class="btn btn-small">История</a>
-            </div>
-        </div>
-
-        <!-- Ближайшие забеги -->
-        <div class="races-section">
-            <h2>🏇 Ближайшие забеги</h2>
-            <div class="race-cards">
-                <div class="race-card">
-                    <h3>Кубок Осени 2025</h3>
-                    <div class="race-time">Старт: 11.11.2025 в 18:57</div>
-                    <div class="race-status">Запланирован через 22ч 49м</div>
-                    <a href="{% url 'place_bet' %}" class="btn btn-race">Сделать ставку</a>
-                </div>
-                <div class="race-card">
-                    <h3>Золотой Галоп 2025</h3>
-                    <div class="race-time">Старт: 12.11.2025 в 18:57</div>
-                    <div class="race-status">Запланирован через 46ч 49м</div>
-                    <a href="{% url 'place_bet' %}" class="btn btn-race">Сделать ставку</a>
-                </div>
-                <div class="race-card">
-                    <h3>Весенний Спринт 2025</h3>
-                    <div class="race-time">Старт: 15.11.2025 в 18:57</div>
-                    <div class="race-status">Запланирован через 119ч 49м</div>
-                    <a href="{% url 'place_bet' %}" class="btn btn-race">Сделать ставку</a>
-                </div>
-            </div>
+<div class="welcome-section card">
+    <h1>Добро пожаловать на Виртуальный Ипподром!</h1>
+    <p>Испытайте удачу в самых захватывающих скачках сезона!</p>
+    
+    {% if user.is_authenticated %}
+    <div class="user-welcome">
+        <h2>Привет, {{ user.username }}! 🎯</h2>
+        <div class="balance-info">
+            <span class="balance-label">Ваш баланс:</span>
+            <span class="balance-amount">{{ user.betting_profile.balance }} ₽</span>
         </div>
     </div>
     {% endif %}
 </div>
+
+{% if user.is_authenticated %}
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Ваш игровой профиль</h2>
+        </div>
+        <div class="player-stats">
+            <div class="level-badge">
+                <div class="level-icon">🏆</div>
+                <div class="level-info">
+                    <div class="level-name">{{ player_level }}</div>
+                    <div class="level-desc">{{ level_description }}</div>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">{{ total_bets }}</div>
+                    <div class="stat-label">Всего ставок</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value {% if win_rate >= 30 %}stat-positive{% elif win_rate >= 15 %}stat-neutral{% else %}stat-negative{% endif %}">
+                        {{ win_rate }}%
+                    </div>
+                    <div class="stat-label">Процент побед</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">{{ active_bets }}</div>
+                    <div class="stat-label">Активные ставки</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value stat-positive">+{{ total_won }} ₽</div>
+                    <div class="stat-label">Общий выигрыш</div>
+                </div>
+            </div>
+            
+            <div class="next-goal">
+                <h3>🎯 Следующая цель</h3>
+                <p>{{ next_goal }}</p>
+            </div>
+            
+            <div class="motivation-tip">
+                <h3>💡 Совет дня</h3>
+                <p>Изучайте статистику лошадей - фавориты выигрывают чаще, но аутсайдеры приносят больше!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Ближайшие забеги</h2>
+        </div>
+        <div class="race-list">
+            {% for race in upcoming_races %}
+            <div class="race-card upcoming">
+                <div class="race-header">
+                    <div class="race-name">{{ race.name }}</div>
+                    <div class="race-status status-scheduled">{{ race.get_status_display }}</div>
+                </div>
+                <div class="race-time">
+                    <span class="race-timer" data-start-time="{{ race.start_time|date:'c' }}">
+                        {{ race.start_time }}
+                    </span>
+                </div>
+                <div class="race-horses">
+                    {% for horse in race.horses.all|slice:":3" %}
+                    <span class="horse-badge">{{ horse.name }} ({{ horse.odds }})</span>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'betting:place_bet_race' race.id %}" class="btn btn-primary btn-block">
+                    🐎 Сделать ставку
+                </a>
+            </div>
+            {% empty %}
+            <div class="no-races">
+                <p>Нет запланированных забегов</p>
+                <p>Новые забеги появятся скоро!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Ближайшие забеги</h2>
+        </div>
+        <div class="race-list">
+            {% for race in upcoming_races %}
+            <div class="race-card upcoming">
+                <div class="race-header">
+                    <div class="race-name">{{ race.name }}</div>
+                    <div class="race-status status-scheduled">{{ race.get_status_display }}</div>
+                </div>
+                <div class="race-time">
+                    <span class="race-timer" data-start-time="{{ race.start_time|date:'c' }}">
+                        {{ race.start_time }}
+                    </span>
+                </div>
+                <div class="race-horses">
+                    {% for horse in race.horses.all|slice:":3" %}
+                    <span class="horse-badge">{{ horse.name }} ({{ horse.odds }})</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-races">
+                <p>Нет запланированных забегов</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Почему стоит играть?</h2>
+        </div>
+        <div class="features-list">
+            <div class="feature-item">
+                <span class="feature-icon">💰</span>
+                <div class="feature-text">
+                    <strong>Начальный бонус 1000 ₽</strong>
+                    <p>Для всех новых игроков</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🏇</span>
+                <div class="feature-text">
+                    <strong>Реалистичные скачки</strong>
+                    <p>На основе реальной статистики</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">⚡</span>
+                <div class="feature-text">
+                    <strong>Мгновенные выплаты</strong>
+                    <p>Выигрыши сразу на баланс</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📊</span>
+                <div class="feature-text">
+                    <strong>Детальная статистика</strong>
+                    <p>Отслеживайте свой прогресс</p>
+                </div>
+            </div>
+        </div>
+        <div class="auth-promo">
+            <a href="{% url 'betting:register' %}" class="btn btn-success btn-block">Начать играть</a>
+            <p>Уже есть аккаунт? <a href="{% url 'betting:login' %}">Войдите</a></p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if recent_races %}
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Недавние результаты</h2>
+    </div>
+    <div class="race-list">
+        {% for race in recent_races %}
+        <div class="race-card finished">
+            <div class="race-header">
+                <div class="race-name">{{ race.name }}</div>
+                <div class="race-status status-finished">{{ race.get_status_display }}</div>
+            </div>
+            {% if race.winner %}
+            <div class="race-winner">
+                🏆 Победитель: <strong>{{ race.winner.name }}</strong>
+            </div>
+            {% endif %}
+            <div class="race-time">{{ race.start_time }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 {% endblock %}

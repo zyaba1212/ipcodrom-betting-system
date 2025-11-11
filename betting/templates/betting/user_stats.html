@@ -1,118 +1,81 @@
-{% extends "betting/base.html" %}
+{% extends 'betting/base.html' %}
 
-{% block title %}Моя статистика - Ипподром{% endblock %}
+{% block title %}Статистика - Система ставок{% endblock %}
 
 {% block content %}
-<div class="stats-container">
-    <h2>📊 Моя статистика</h2>
-    
-    <div class="stats-grid">
-        <div class="stat-card large">
-            <h3>Общая статистика</h3>
-            <div class="stat-item">
-                <span>Всего ставок:</span>
-                <strong>{{ total_bets }}</strong>
-            </div>
-            <div class="stat-item">
-                <span>Выиграно ставок:</span>
-                <strong>{{ won_bets }}</strong>
-            </div>
-            <div class="stat-item">
-                <span>Проиграно ставок:</span>
-                <strong>{{ lost_bets }}</strong>
-            </div>
-            <div class="stat-item">
-                <span>Процент побед:</span>
-                <strong>{{ win_percentage }}%</strong>
-            </div>
-        </div>
-        
-        <div class="stat-card large">
-            <h3>Финансы</h3>
-            <div class="stat-item">
-                <span>Общий выигрыш:</span>
-                <strong class="positive">{{ total_won }}₽</strong>
-            </div>
-            <div class="stat-item">
-                <span>Общий проигрыш:</span>
-                <strong class="negative">{{ total_lost }}₽</strong>
-            </div>
-            <div class="stat-item">
-                <span>Чистая прибыль:</span>
-                <strong class="{% if net_profit >= 0 %}positive{% else %}negative{% endif %}">
-                    {{ net_profit }}₽
-                </strong>
-            </div>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">Ваша статистика</h1>
     </div>
-    
-    <!-- График успешности -->
-    <div class="success-chart">
-        <h3>Успешность ставок по месяцам</h3>
-        <div class="chart-bars">
-            {% for month in monthly_stats %}
-            <div class="chart-bar">
-                <div class="bar-fill" style="height: {{ month.win_percentage }}%"></div>
-                <span class="bar-label">{{ month.month }}</span>
+
+    <div class="stats-overview">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_bets }}</div>
+                <div class="stat-label">Всего ставок</div>
             </div>
-            {% endfor %}
+            <div class="stat-card">
+                <div class="stat-value">{{ active_bets }}</div>
+                <div class="stat-label">Активные ставки</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value {% if net_profit >= 0 %}stat-positive{% else %}stat-negative{% endif %}">
+                    {{ net_profit }} ₽
+                </div>
+                <div class="stat-label">Чистая прибыль</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ user_profile.balance }} ₽</div>
+                <div class="stat-label">Текущий баланс</div>
+            </div>
         </div>
     </div>
 
-    <!-- Быстрые действия -->
-    <div class="stats-actions">
-        <a href="{% url 'bet_history' %}" class="btn-primary">📋 История ставок</a>
-        <a href="{% url 'place_bet' %}" class="btn-primary">🎯 Сделать ставку</a>
-        <a href="{% url 'deposit' %}" class="btn-secondary">💳 Пополнить счет</a>
+    <div class="detailed-stats grid grid-2">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Результаты ставок</h2>
+            </div>
+            <div class="stats-list">
+                <div class="stat-item">
+                    <span class="stat-label">Выиграно ставок:</span>
+                    <span class="stat-value">{{ won_bets }} ({{ win_rate|floatformat:1 }}%)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Проиграно ставок:</span>
+                    <span class="stat-value">{{ lost_bets }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Всего поставлено:</span>
+                    <span class="stat-value">{{ total_wagered }} ₽</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Всего выиграно:</span>
+                    <span class="stat-value">{{ total_won }} ₽</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Ставки по типам</h2>
+            </div>
+            <div class="stats-list">
+                {% for bet_type in bet_types %}
+                <div class="stat-item">
+                    <span class="stat-label">{{ bet_type.bet_type }}:</span>
+                    <span class="stat-value">{{ bet_type.count }} ({{ bet_type.won }} выиграно)</span>
+                </div>
+                {% empty %}
+                <p>Нет данных по типам ставок</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <a href="{% url 'betting:place_bet' %}" class="btn btn-primary">Сделать ставку</a>
+        <a href="{% url 'betting:bet_history' %}" class="btn btn-secondary">История ставок</a>
     </div>
 </div>
-
-<style>
-.success-chart {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 25px;
-    border-radius: 10px;
-    margin: 30px 0;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.chart-bars {
-    display: flex;
-    justify-content: space-around;
-    align-items: end;
-    height: 200px;
-    margin: 20px 0;
-    border-bottom: 2px solid #ecf0f1;
-    padding-bottom: 20px;
-}
-
-.chart-bar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 50px;
-}
-
-.bar-fill {
-    width: 30px;
-    background: linear-gradient(to top, #3498db, #2980b9);
-    border-radius: 3px 3px 0 0;
-    transition: height 0.3s ease;
-    min-height: 10px;
-}
-
-.bar-label {
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #2c3e50;
-    font-weight: bold;
-}
-
-.stats-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 30px;
-}
-</style>
 {% endblock %}
